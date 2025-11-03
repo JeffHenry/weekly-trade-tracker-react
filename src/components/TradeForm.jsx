@@ -159,12 +159,14 @@ function TradeForm({ onAddTrade }) {
           </div>
         </div>
 
-        <button
-          type="submit"
-          className="bg-green-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-green-700 hover:shadow-lg transition-all"
-        >
-          Add Trade
-        </button>
+        <div className="width-100% align flex justify-center">
+          <button
+            type="submit"
+            className="bg-green-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-green-700 hover:shadow-lg transition-all"
+          >
+            Add Trade
+          </button>
+        </div>
       </form>
     </div>
   );

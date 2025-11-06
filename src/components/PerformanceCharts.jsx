@@ -121,12 +121,13 @@ function PerformanceCharts({ trades }) {
     if (!wlCanvas) return;
 
     const wlCtx = wlCanvas.getContext("2d");
+
+    // Force canvas size reset to ensure clean slate
+    wlCanvas.width = wlCanvas.width;
+
     const wlWidth = wlCanvas.width;
     const wlHeight = wlCanvas.height;
     const padding = 50;
-
-    // Clear canvas
-    wlCtx.clearRect(0, 0, wlWidth, wlHeight);
 
     // Organize data by month
     const monthData = {};
@@ -170,23 +171,29 @@ function PerformanceCharts({ trades }) {
       const losses = monthData[month].losses;
       const chartHeight = wlHeight - 2 * padding;
 
-      const winHeight = (wins / maxCount) * chartHeight;
-      wlCtx.fillStyle = "#10b981";
-      wlCtx.fillRect(
-        x - barWidth,
-        wlHeight - padding - winHeight,
-        barWidth * 0.8,
-        winHeight
-      );
+      // Only draw win bar if there are wins
+      if (wins > 0) {
+        const winHeight = (wins / maxCount) * chartHeight;
+        wlCtx.fillStyle = "#10b981";
+        wlCtx.fillRect(
+          x - barWidth,
+          wlHeight - padding - winHeight,
+          barWidth * 0.8,
+          winHeight
+        );
+      }
 
-      const lossHeight = (losses / maxCount) * chartHeight;
-      wlCtx.fillStyle = "#ef4444";
-      wlCtx.fillRect(
-        x + barWidth * 0.2,
-        wlHeight - padding - lossHeight,
-        barWidth * 0.8,
-        lossHeight
-      );
+      // Only draw loss bar if there are losses
+      if (losses > 0) {
+        const lossHeight = (losses / maxCount) * chartHeight;
+        wlCtx.fillStyle = "#ef4444";
+        wlCtx.fillRect(
+          x + barWidth * 0.2,
+          wlHeight - padding - lossHeight,
+          barWidth * 0.8,
+          lossHeight
+        );
+      }
 
       // Draw month label
       wlCtx.fillStyle = "#666";
@@ -195,23 +202,23 @@ function PerformanceCharts({ trades }) {
       wlCtx.fillText(month.slice(5), x, wlHeight - padding + 20);
     });
 
-    // Draw legend
-    wlCtx.fillStyle = "#10b981";
-    wlCtx.fillRect(wlWidth - padding - 100, padding, 15, 15);
-    wlCtx.fillStyle = "#666";
-    wlCtx.font = "12px sans-serif";
-    wlCtx.textAlign = "left";
-    wlCtx.fillText("Wins", wlWidth - padding - 80, padding + 12);
+    // // Draw legend
+    // wlCtx.fillStyle = "#10b981";
+    // wlCtx.fillRect(wlWidth - padding - 100, padding, 15, 15);
+    // wlCtx.fillStyle = "#666";
+    // wlCtx.font = "12px sans-serif";
+    // wlCtx.textAlign = "left";
+    // wlCtx.fillText("Wins", wlWidth - padding - 80, padding + 12);
 
-    wlCtx.fillStyle = "#ef4444";
-    wlCtx.fillRect(wlWidth - padding - 100, padding + 25, 15, 15);
-    wlCtx.fillText("Losses", wlWidth - padding - 80, padding + 37);
+    // wlCtx.fillStyle = "#ef4444";
+    // wlCtx.fillRect(wlWidth - padding - 100, padding + 25, 15, 15);
+    // wlCtx.fillText("Losses", wlWidth - padding - 80, padding + 37);
 
-    // Draw title
-    wlCtx.fillStyle = "#333";
-    wlCtx.font = "bold 14px sans-serif";
-    wlCtx.textAlign = "center";
-    wlCtx.fillText("Win/Loss by Month", wlWidth / 2, 20);
+    // // Draw title
+    // wlCtx.fillStyle = "#333";
+    // wlCtx.font = "bold 14px sans-serif";
+    // wlCtx.textAlign = "center";
+    // wlCtx.fillText("Win/Loss by Month", wlWidth / 2, 20);
   }, [closedTrades]);
 
   if (closedTrades.length === 0) {
